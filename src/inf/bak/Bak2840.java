@@ -33,6 +33,7 @@ public class Bak2840 {
 
         boolean[] used = new boolean[26];
         for (int i = 0; i < N; i++) {
+            if (wheel[i] == '?') continue;
             if (used[wheel[i] - 'A']) {
                 System.out.println("!");
                 return;
