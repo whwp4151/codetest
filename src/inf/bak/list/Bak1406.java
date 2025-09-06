@@ -19,11 +19,7 @@ public class Bak1406 {
 
         int M = Integer.parseInt(br.readLine());
 
-        ListIterator<String> iterator = list.listIterator();
-        while (iterator.hasNext()) {
-            iterator.next();
-        }
-
+        ListIterator<String> iterator = list.listIterator(list.size());
         while (M-- > 0) {
             String[] split = br.readLine().split(" ");
             String command = split[0];
@@ -40,6 +36,7 @@ public class Bak1406 {
                     }
                 } else if (command.equals("B")) {
                     if (iterator.hasPrevious()) {
+                        iterator.previous();
                         iterator.remove();
                     }
                 }
