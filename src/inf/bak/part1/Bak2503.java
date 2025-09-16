@@ -1,8 +1,6 @@
 package inf.bak.part1;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Bak2503 {
@@ -12,55 +10,52 @@ public class Bak2503 {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int N = Integer.parseInt(br.readLine());
+        int[][] q_arr = new int[N][3];
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            q_arr[i][0] = Integer.parseInt(st.nextToken());
+            q_arr[i][1] = Integer.parseInt(st.nextToken());
+            q_arr[i][2] = Integer.parseInt(st.nextToken());
+        }
+        br.close();
 
-        List<Integer> list = new ArrayList<>();
+        int answer = 0;
         for (int i = 1; i <= 9; i++) {
             for (int j = 1; j <= 9; j++) {
                 if (i == j) continue;
                 for (int k = 1; k <= 9; k++) {
                     if (k == j || k == i) continue;
-                    list.add(i * 100 + j * 10 + k);
-                }
-            }
-        }
 
-        while (N-- > 0) {
-            List<Integer> temp = new ArrayList<>();
-            StringTokenizer st = new StringTokenizer(br.readLine());
+                    boolean possible = true;
+                    for (int n = 0; n < N; n++) {
+                        int num = q_arr[n][0];
+                        int strike = 0, ball = 0;
 
-            int number = Integer.parseInt(st.nextToken());
-            int strike = Integer.parseInt(st.nextToken());
-            int ball = Integer.parseInt(st.nextToken());
+                        int nx = num / 100;
+                        int ny = (num / 10) % 10;
+                        int nz = num % 10;
 
-            for (int n : list) {
-                int strikeCount = 0;
-                int ballCount = 0;
+                        if (nx == i) strike++;
+                        else if (nx == j || nx == k) ball++;
+                        if (ny == j) strike++;
+                        else if (ny == i || ny == k) ball++;
+                        if (nz == k) strike++;
+                        else if (nz == i || nz == j) ball++;
 
-                int[] nDigits = { n / 100, (n / 10) % 10, n % 10 };
-                int[] numberDigits = { number / 100, (number / 10) % 10, number % 10 };
-
-                for (int i = 0; i < 3; i++) {
-                    if (nDigits[i] == numberDigits[i]) {
-                        strikeCount++;
-                    } else {
-                        for (int j = 0; j < 3; j++) {
-                            if (i != j && nDigits[i] == numberDigits[j]) {
-                                ballCount++;
-                                break;
-                            }
+                        if (q_arr[n][1] != strike || q_arr[n][2] != ball) {
+                            possible = false;
+                            break;
                         }
                     }
-                }
 
-                if (strikeCount == strike && ballCount == ball) {
-                    temp.add(n);
+                    if (possible) {
+                        answer++;
+                    }
                 }
             }
-
-            list = temp;
         }
 
-        bw.write(list.size() + "\n");
+        bw.write(answer + "\n");
         bw.flush();
     }
 
