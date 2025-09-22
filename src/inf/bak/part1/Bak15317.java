@@ -31,24 +31,31 @@ public class Bak15317 {
         Arrays.sort(cost);
         Arrays.sort(budget);
 
-        int left = 0;
-        for (int i = 0; i < M; i++) {
-            if (budget[i] >= cost[left]) {
-                left++;
-                if (left >= N) {
-                    break;
-                }
-            }else if (X > 0 && cost[left] - budget[i] <= X) {
-                X -= (cost[left] - budget[i]);
-                left++;
-                if (left >= N) {
-                    break;
-                }
+        int answer = 0;
+        int l = 0;
+        int r = Math.min(N, M);
+        while (l <= r) {
+            int m = (l + r) / 2;
+            if (getMinimumSupport(cost, budget, m) <= X) {
+                answer = m;
+                l = m + 1;
+            } else {
+                r = m - 1;
             }
         }
 
-        bw.write(left + "\n");
+        bw.write(answer + "\n");
         bw.flush();
+    }
+
+    private static long getMinimumSupport(int[] cost, int[] budget, int m) {
+        long needSupport = 0;
+
+        for (int i = 0; i < m; i++) {
+            needSupport += Math.max(cost[i] - budget[budget.length - m + i], 0);
+        }
+
+        return needSupport;
     }
 
 }
