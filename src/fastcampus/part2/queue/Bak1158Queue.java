@@ -21,16 +21,11 @@ public class Bak1158Queue {
             queue.add(i);
         }
 
-        int i = 0;
-        while (!queue.isEmpty()) {
-            Integer poll = queue.poll();
-            i++;
-            if (i == K) {
-                i = 0;
-                answer.add(poll);
-            } else {
-                queue.add(poll);
+        for (int j = 0; j < N; j++) {
+            for (int i = 1; i < K; i++) {
+                queue.add(queue.poll());
             }
+            answer.add(queue.poll());
         }
 
         String collect = answer.stream()
