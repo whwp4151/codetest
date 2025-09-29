@@ -1,9 +1,7 @@
 package fastcampus.part2.queue;
 
 import java.io.*;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Bak1966 {
 
@@ -17,13 +15,28 @@ public class Bak1966 {
             int N = Integer.parseInt(st.nextToken());
             int M = Integer.parseInt(st.nextToken());
 
-            PriorityQueue<Node> queue = new PriorityQueue<>(new NodeComparator());
+            Queue<Node> queue = new LinkedList<>();
+            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Collections.reverseOrder());
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < N; i++) {
-                queue.add(new Node(i, Integer.parseInt(st.nextToken())));
+                int priority = Integer.parseInt(st.nextToken());
+                queue.add(new Node(i, priority));
+                priorityQueue.add(priority);
             }
 
-            System.out.println(queue);
+            for (int i = 0; i < N; i++) {
+                while (queue.peek().priority < priorityQueue.peek()) {
+                    queue.offer(queue.poll());
+                }
+
+                if (queue.peek().index == M) {
+                    bw.write((i + 1) + "\n");
+                    break;
+                }
+
+                queue.poll();
+                priorityQueue.poll();
+            }
 
         }
 
@@ -39,21 +52,6 @@ public class Bak1966 {
             this.priority = priority;
         }
 
-    }
-
-    private static class NodeComparator implements Comparator<Node> {
-        @Override
-        public int compare(Node n1, Node n2) {
-            if (n1.priority > n2.priority) {
-                return -1;
-            } else if (n1.priority < n2.priority) {
-                return 1;
-            } else {
-                if (n1.index > n2.index) {
-                    
-                }
-            }
-        }
     }
 
 }
