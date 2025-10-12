@@ -1,7 +1,6 @@
 package fastcampus.part2.stack;
 
 import java.io.*;
-import java.util.Stack;
 
 public class Bak16120 {
 
@@ -22,34 +21,18 @@ public class Bak16120 {
             return "PPAP";
         }
 
-        char[] ppap = new char[]{'P', 'P', 'A', 'P'};
-
-        Stack<Character> left = new Stack<>();
-        Stack<Character> right = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            left.push(s.charAt(i));
-        }
-
-        int j = 3;
-        while (!left.isEmpty()) {
-            char c = left.pop();
-            if (c == ppap[j]) {
-                j--;
-            } else {
-                j = 3;
-            }
-
-            if (j < 0) {
-                for (int i = 0; i < 4; i++) {
-                    right.pop();
-                }
-                right.push('P');
-            } else {
-                right.push(c);
+        char[] input = s.toCharArray();
+        char[] stack = new char[input.length];
+        int j = 0;
+        for (char c : input) {
+            stack[j++] = c;
+            if (j >= 4 && stack[j-1] == 'P' && stack[j-2] == 'A' &&
+                    stack[j-3] == 'P' && stack[j-4] == 'P') {
+                j -= 3;
             }
         }
 
-        return "PPAP";
+        return j == 1 && stack[0] == 'P' ? "PPAP" : "NP";
     }
 
 }
