@@ -23,25 +23,22 @@ public class Bak2841 {
             st = new StringTokenizer(br.readLine());
             int line = Integer.parseInt(st.nextToken());
             int fret = Integer.parseInt(st.nextToken());
-            Stack<Integer> stack = map.getOrDefault(line, new Stack<>());
 
-            if (!stack.isEmpty() && stack.peek() >= fret) {
-                while (!stack.isEmpty() && stack.peek() > fret) {
+            Stack<Integer> stack = map.computeIfAbsent(line, k -> new Stack<>());
+
+            while (!stack.isEmpty()) {
+                if (stack.peek() > fret) {
                     answer++;
                     stack.pop();
+                } else {
+                    break;
                 }
+            }
 
-                if (stack.isEmpty() || stack.peek() != fret) {
-                    stack.push(fret);
-                    answer++;
-                }
-
-            } else {
+            if (stack.isEmpty() || stack.peek() != fret) {
                 stack.push(fret);
                 answer++;
             }
-
-            map.put(line, stack);
         }
 
         bw.write(answer + "\n");
