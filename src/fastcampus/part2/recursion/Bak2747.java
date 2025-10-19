@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class Bak2747 {
 
-    private static int[] cache = new int[50];
+    private static final int[] cache = new int[50];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

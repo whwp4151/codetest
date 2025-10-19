@@ -8,14 +8,23 @@ import java.util.StringTokenizer;
 
 public class Bak15654 {
 
+    private static int N;
+    private static int M;
+    private static int[] arr;
+    private static boolean[] check;
+    private static int[] output;
+    private static final StringBuilder sb = new StringBuilder();
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        int[] arr = new int[N];
+        arr = new int[N];
+        check = new boolean[N];
+        output = new int[M];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
@@ -24,19 +33,28 @@ public class Bak15654 {
 
         Arrays.sort(arr);
 
-        for (int i = 0; i < N; i++) {
-            recursion(0, i, M, arr);
-            System.out.println();
-        }
+        recursion(0, 0);
+
+        System.out.println(sb);
     }
 
-    private static void recursion(int depth, int i, int M, int[] arr) {
-        if (depth == M || i == arr.length) {
+    private static void recursion(int depth, int start) {
+        if (depth == M) {
+            for (int i : output) {
+                sb.append(i).append(" ");
+            }
+            sb.append("\n");
             return;
         }
 
-        System.out.print(arr[i] + " ");
-        recursion(depth+1, i+1, M, arr);
+        for (int i = start; i < N; i++) {
+            if (!check[i]) {
+                check[i] = true;
+                output[depth] = arr[i];
+                recursion(depth + 1, i + 1);
+                check[i] = false;
+            }
+        }
     }
 
 }
