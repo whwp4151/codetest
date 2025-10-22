@@ -41,7 +41,7 @@ public class Bak11725 {
         bw.flush();
     }
 
-    private static void recursion(int i) throws IOException {
+    private static void recursion(int i) {
         check[i] = true;
         List<Integer> list = tree[i];
         for (int child : list) {
