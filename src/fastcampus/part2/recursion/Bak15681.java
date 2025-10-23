@@ -1,8 +1,6 @@
 package fastcampus.part2.recursion;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -15,6 +13,7 @@ public class Bak15681 {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
@@ -28,8 +27,6 @@ public class Bak15681 {
             tree[i] = new ArrayList<>();
         }
 
-        check[R] = true;
-
         for (int i = 0; i < N - 1; i++) {
             st = new StringTokenizer(br.readLine());
             int node1 = Integer.parseInt(st.nextToken());
@@ -38,14 +35,30 @@ public class Bak15681 {
             tree[node2].add(node1);
         }
 
+        child[R] = recursion(R);
+
         for (int i = 0; i < Q; i++) {
-            System.out.println(recursion(Integer.parseInt(br.readLine())));
+            bw.write(child[Integer.parseInt(br.readLine())] + "\n");
         }
+        bw.flush();
     }
 
     private static int recursion(int node) {
+        if (child[node] != 0) {
+            return child[node];
+        }
 
-        return 0;
+        check[node] = true;
+        List<Integer> list = tree[node];
+        int count = 1;
+        for (int i : list) {
+            if (!check[i]) {
+                count += recursion(i);
+            }
+        }
+
+        child[node] = count;
+        return count;
     }
 
 }
