@@ -29,14 +29,28 @@ public class Bak1759 {
 
         Arrays.sort(arr);
 
-        recursive(0, 0);
+        recursive(0, 0, 0);
     }
 
-    private static void recursive(int length, int index) {
+    private static boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
+
+    private static void recursive(int length, int index, int vowelCount) {
         if (L == length) {
+            if (vowelCount >= 1 && L - vowelCount >= 2) {
+                System.out.println(password);
+            }
             return;
         }
 
+        if (index < C) {
+            password[length] = arr[index];
+            int n = isVowel(arr[index]) ? 1 : 0;
+            recursive(length + 1, index + 1, n + vowelCount);
+            password[length] = 0;
+            recursive(length, index + 1, vowelCount);
+        }
     }
 
 }
