@@ -26,12 +26,26 @@ public class Bak10971 {
             }
         }
 
+        for (int i = 0; i < N; i++) {
+            recursive(i, 0, 0, 0);
+        }
 
+        System.out.println(MIN);
     }
 
-    private static void recursive(int i, int j, int sum) {
-        MIN = Math.min(MIN, sum);
+    private static void recursive(int start, int node, int sum, int cnt) {
+        if (cnt == N && start == node) {
+            MIN = Math.min(MIN, sum);
+            return;
+        }
 
+        for (int i = 0; i < N; i++) {
+            if (!check[i] && arr[node][i] != 0) {
+                check[i] = true;
+                recursive(start, i, sum + arr[node][i], cnt + 1);
+                check[i] = false;
+            }
+        }
     }
 
 }
