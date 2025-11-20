@@ -26,9 +26,7 @@ public class Bak10971 {
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            recursive(i, 0, 0, 0);
-        }
+        recursive(0, 0, 0, 0);
 
         System.out.println(MIN);
     }
