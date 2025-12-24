@@ -3,16 +3,15 @@ package fastcampus.part3.graph;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Bak2573 {
 
     private static int N, M;
     private static int[][] graph;
     private static List<Ice> iceList = new ArrayList<>();
-    private static int year = 0;
+    private static boolean[][] visited;
+    private static int year = 1;
 
     private static int[] dy = {-1, 0, 1, 0};
     private static int[] dx = {0, 1, 0, -1};
@@ -24,6 +23,7 @@ public class Bak2573 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         graph = new int[N][M];
+        visited = new boolean[N][M];
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
@@ -36,24 +36,32 @@ public class Bak2573 {
         }
         br.close();
 
+
         while (true) {
-            for (int i = 0; i < iceList.size(); i++) {
-                Ice ice = iceList.get(i);
+            year++;
+            for (Ice ice : iceList) {
                 int zero = getZero(ice.row, ice.col);
                 ice.addYear(zero);
             }
 
-            for (int i = 0; i < iceList.size(); i++) {
+            for (int i = iceList.size() - 1; i >= 0; i--) {
                 Ice ice = iceList.get(i);
                 if (ice.height <= 0) {
-                    iceList.remove(ice);
+                    iceList.remove(i);
                     graph[ice.row][ice.col] = 0;
-                    i--;
+                } else {
+                    visited[ice.row][ice.col] = false;
                 }
             }
 
-            year++;
-            if (year == 3) {
+
+            if (iceList.isEmpty()) {
+                year = 0;
+                break;
+            }
+
+            Ice first = iceList.get(0);
+            if (dfs(first.row, first.col) != iceList.size()) {
                 break;
             }
         }
@@ -61,15 +69,30 @@ public class Bak2573 {
         System.out.println(year);
     }
 
+    private static int dfs(int row, int col) {
+        int size = 1;
+        visited[row][col] = true;
+        for (int k = 0; k < 4; k++) {
+            int ny = row + dy[k];
+            int nx = col + dx[k];
+
+            if (visited[ny][nx]) {
+                continue;
+            }
+
+            if (graph[ny][nx] != 0) {
+                size += dfs(ny, nx);
+            }
+        }
+
+        return size;
+    }
+
     private static int getZero(int row, int col) {
         int count = 0;
         for (int k = 0; k < 4; k++) {
             int ny = row + dy[k];
             int nx = col + dx[k];
-
-            if (ny < 0 || ny >= N || nx < 0 || nx >= M) {
-                continue;
-            }
 
             if (graph[ny][nx] == 0) {
                 count++;
