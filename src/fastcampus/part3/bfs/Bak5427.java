@@ -37,6 +37,8 @@ public class Bak5427 {
         int[][] visited = new int[h][w];
         int[][] fired = new int[h][w];
 
+        fire(w, h, arr, fired);
+
         Queue<Node> queue = new LinkedList<>();
         boolean flag = false;
         for (int i = 0; i < h; i++) {
@@ -51,10 +53,15 @@ public class Bak5427 {
             if (flag) break;
         }
 
+        boolean isEscaped = false;
         while (!queue.isEmpty()) {
-            fire(w, h, arr);
-
             Node poll = queue.poll();
+
+            if (isExit(poll, w, h)) {
+                bw.write(visited[poll.r][poll.c] + "\n");
+                isEscaped = true;
+                break;
+            }
 
             for (int i = 0; i < 4; i++) {
                 int r = poll.r + dy[i];
@@ -65,21 +72,27 @@ public class Bak5427 {
                 }
 
                 if (visited[r][c] == 0 && arr[r][c] == '.') {
-                    queue.add(new Node(r, c));
-                    visited[r][c] = visited[poll.r][poll.c] + 1;
+                    int time = visited[poll.r][poll.c] + 1;
+                    if (fired[r][c] == 0 || time < fired[r][c]) {
+                        queue.add(new Node(r, c));
+                        visited[r][c] = time;
+                    }
                 }
             }
         }
 
-        System.out.println();
+        if (!isEscaped) {
+            bw.write("IMPOSSIBLE\n");
+        }
     }
 
-    private static void fire(int w, int h, char[][] arr) {
+    private static void fire(int w, int h, char[][] arr, int[][] fired) {
         Queue<Node> fire = new LinkedList<>();
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 if (arr[i][j] == '*') {
                     fire.add(new Node(i, j));
+                    fired[i][j] = 1;
                 }
             }
         }
@@ -95,14 +108,17 @@ public class Bak5427 {
                     continue;
                 }
 
-                if (arr[r][c] == '.') {
-                    arr[r][c] = '*';
+                if (fired[r][c] == 0 && arr[r][c] == '.') {
+                    fire.add(new Node(r, c));
+                    fired[r][c] = fired[poll.r][poll.c] + 1;
                 }
             }
         }
     }
 
-
+    private static boolean isExit(Node now, int w, int h) {
+        return now.r == 0 || now.r == h -1 || now.c == 0 || now.c == w - 1;
+    }
 
     private static class Node {
         int r, c;
