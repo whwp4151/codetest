@@ -18,7 +18,19 @@ public class Bak11047 {
         }
         br.close();
 
-        System.out.println();
+        int count = 0;
+        for (int i = N -1; i >= 0; i--) {
+            if (arr[i] <= K) {
+                count += K / arr[i];
+                K %= arr[i];
+            }
+
+            if (K == 0) {
+                break;
+            }
+        }
+
+        System.out.println(count);
     }
 
 }
