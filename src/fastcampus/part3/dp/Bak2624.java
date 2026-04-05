@@ -12,12 +12,24 @@ public class Bak2624 {
 
         int T = Integer.parseInt(br.readLine());
         int k = Integer.parseInt(br.readLine());
-        int[][] coin = new int[k][2];
         int[][] dp = new int[k + 1][T + 1];
-        for (int i = 0; i < k; i++) {
+        dp[0][0] = 1;
+
+        for (int i = 1; i <= k; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            coin[i][0] = Integer.parseInt(st.nextToken());
-            coin[i][1] = Integer.parseInt(st.nextToken());
+            int coin = Integer.parseInt(st.nextToken());
+            int cnt = Integer.parseInt(st.nextToken());
+
+            for (int value = 0; value <= T; value++) {
+                for (int j = 0; j <= cnt; j++) {
+                    int next = value + coin * j;
+                    if (next > T) {
+                        break;
+                    }
+
+                    dp[i][next] += dp[i - 1][value];
+                }
+            }
         }
 
         System.out.println(dp[k][T]);
